@@ -1,16 +1,44 @@
 <template>
-  <div>
-    <input type="text" v-model.trim="pointA" :disabled="loading">
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <input
+        type="text"
+        class="form-control"
+        v-model.trim="pointA"
+        :disabled="loading"
+      >
+    </div>
 
-    <input type="text" v-model.trim="pointB" :disabled="loading">
+    <div class="col-md-4 mb-3">
+      <input
+        type="text"
+        class="form-control"
+        v-model.trim="pointB"
+        :disabled="loading"
+      >
+    </div>
 
-    <button type="button" :disabled="loading" @click="createRoute">
-      go
-    </button>
+    <div class="col-md-2 col-sm-6 col-6">
+      <button
+        type="button"
+        class="btn btn-primary w-100"
+        :disabled="loading || !havePoints"
+        @click="createRoute"
+      >
+        GO!
+      </button>
+    </div>
 
-    <button type="button" :disabled="loading" @click="clear">
-      clear
-    </button>
+    <div class="col-md-2 col-sm-6 col-6">
+      <button
+        type="button"
+        class="btn btn-primary w-100"
+        :disabled="loading || !havePoints"
+        @click="clear"
+      >
+        Clear
+      </button>
+    </div>
   </div>
 </template>
 
@@ -24,11 +52,17 @@ export default {
     loading: false,
 
     // Точка A
-    pointA: 'Краснодар',
+    pointA: '',
 
     // Точка B
-    pointB: 'Москва'
+    pointB: ''
   }),
+  computed: {
+    // Флаг наличия точек маршрута
+    havePoints() {
+      return !!this.pointA && !!this.pointB
+    }
+  },
   methods: {
     // Отчистить маршруты
     clear() {

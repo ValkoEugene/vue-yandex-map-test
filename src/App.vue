@@ -1,36 +1,50 @@
 <template>
-  <div id="app">
+  <div id="app" class="container mt-3">
     <template v-if="!isYmapsLoaded">
-      Загрузка...
-    </template>
-    
-    <template v-else>
-      <button type="button" @click="addDistanceCalculatComponent">
-        +
-      </button>
-
-      <p v-for="number in distanceCalculationAmount" :key="number">
-        <distance-calculation @addNewRoute="addNewRoute"/>
-      </p>
-
-      <div>
-        <h2>Журнал запросов</h2>
-
-        <p v-for="(route, index) in routes" :key="index">
-          <span v-if="!route.haveError">
-            {{ `${route.date} ${route.pointA} - ${route.pointB} = ${convertMetersToKm(route.distance)} км` }}
-          </span>
-
-          <span v-else style="color: red;">
-            {{ `${route.date} ${route.message}` }}
-          </span>
-        </p>
+      <h3><em>Загрузка...</em></h3>
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
       </div>
     </template>
+
+    
+    <div v-else class="row">
+      <div class="col-md-1 col-2">
+        <button
+          type="button"
+          class="btn btn-success"
+          :disabled="distanceCalculationAmount >= 10"
+          @click="addDistanceCalculatComponent"
+        >
+          +
+        </button>
+      </div>
+
+      <div class="col-md-11 col-10">
+        <div v-for="number in distanceCalculationAmount" :key="'distanceCalculation' + number">
+          <distance-calculation @addNewRoute="addNewRoute"/>
+        </div>
+
+        <h2>Журнал запросов</h2>
+
+        <p v-for="(route, index) in routes" :key="'route' + index">
+          <em>
+            <span v-if="!route.haveError">
+              {{ `${route.date} ${route.pointA} - ${route.pointB} = ${convertMetersToKm(route.distance)} км` }}
+            </span>
+
+            <span v-else class="text-danger">
+              {{ `${route.date} ${route.message}` }}
+            </span>
+          </em>
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import 'bootstrap/dist/css/bootstrap.css'
 import DistanceCalculation from './components/DistanceCalculation.vue'
 
 export default {
