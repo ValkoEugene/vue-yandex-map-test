@@ -4,6 +4,7 @@
       <input
         type="text"
         class="form-control"
+        placeholder="Пункт A"
         v-model.trim="pointA"
         :disabled="loading"
       >
@@ -13,6 +14,7 @@
       <input
         type="text"
         class="form-control"
+        placeholder="Пункт Б"
         v-model.trim="pointB"
         :disabled="loading"
       >
