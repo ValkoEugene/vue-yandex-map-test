@@ -75,7 +75,16 @@ export default {
     // Получить растояние между маршрутами
     getDistance({ pointA, pointB }) {
       return window.ymaps.route([pointA, pointB])
-        .then(route => route.getLength())
+        .then(route => {
+          const distanceM = route.getLength()
+          const distanceKm = Math.round(distance / 1000)
+          
+          if (distanceM === null || isNaN(distanceKm)) {
+            return Promise.reject(new Error('invalid distance'))
+          }
+
+          return distanceKm
+        })
         .catch(error => Promise.reject(error))
     },
 
@@ -86,17 +95,15 @@ export default {
       const newRoute = {
         pointA: this.pointA,
         pointB: this.pointB,
-        date: moment().format('MM/DD [в] HH:mm')
+        date: moment().format('MM/DD [в] HH:mm'),
+        distanceKm: null,
+        error: null
       }
 
       this.getDistance(newRoute)
-        .then(distance => {
-          Object.assign(newRoute, { distance, haveError: false })
-          this.$emit('addNewRoute', newRoute)
-          this.loading = false
-        })
-        .catch(({ message }) => {
-          Object.assign(newRoute, { message, haveError: true })
+        .then(distanceKm => newRoute.distanceKm = distanceKm)
+        .catch(error => newRoute.error = error)
+        .then(() => {
           this.$emit('addNewRoute', newRoute)
           this.loading = false
         })

@@ -27,14 +27,14 @@
 
         <h2>Журнал запросов</h2>
 
-        <p v-for="(route, index) in routes" :key="'route' + index">
+        <p v-for="(route, index) in routesReverse" :key="'route' + index">
           <em>
-            <span v-if="!route.haveError">
-              {{ `${route.date} ${route.pointA} - ${route.pointB} = ${convertMetersToKm(route.distance)} км` }}
+            <span v-if="!route.error">
+              {{ `${route.date} ${route.pointA} - ${route.pointB} = ${route.distanceKm} км` }}
             </span>
 
             <span v-else class="text-danger">
-              {{ `${route.date} ${route.message}` }}
+              {{ `${route.date} ${route.error.message}` }}
             </span>
           </em>
         </p>
@@ -62,6 +62,12 @@ export default {
     // Количество компонентов с расчётом маршрутов
     distanceCalculationAmount: 1
   }),
+  computed: {
+    // Маршруты начиная с последнего
+    routesReverse() {
+      return this.routes.slice().reverse()
+    }
+  },
   methods: {
     // Добавить компонент расчёта маршрутов
     addDistanceCalculatComponent() {
@@ -72,13 +78,7 @@ export default {
 
     // Добавить маршрут
     addNewRoute(route) {
-      this.routes.unshift(route)
-    },
-
-    // Конвертировать метры в километры
-    convertMetersToKm(value) {
-      const km = Math.round(+value / 1000)
-      return isNaN(km) ? '-' : km
+      this.routes.push(route)
     },
 
     // Инициализация скрипта яндекс карт
