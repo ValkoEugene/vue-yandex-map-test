@@ -77,7 +77,7 @@ export default {
       return window.ymaps.route([pointA, pointB])
         .then(route => {
           const distanceM = route.getLength()
-          const distanceKm = Math.round(distance / 1000)
+          const distanceKm = Math.round(distanceM / 1000)
           
           if (distanceM === null || isNaN(distanceKm)) {
             return Promise.reject(new Error('invalid distance'))
