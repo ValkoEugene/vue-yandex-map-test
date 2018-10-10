@@ -21,23 +21,20 @@
       </div>
 
       <div class="col-md-11 col-10">
-        <div v-for="number in distanceCalculationAmount" :key="'distanceCalculation' + number">
-          <distance-calculation @addNewRoute="addNewRoute"/>
-        </div>
+        <distance-calculation
+          v-for="number in distanceCalculationAmount"
+          :key="'distanceCalculation' + number"
+          @addNewRoute="addNewRoute"
+        />
 
         <h2>Журнал запросов</h2>
 
-        <p v-for="(route, index) in routesReverse" :key="'route' + index">
-          <em>
-            <span v-if="!route.error">
-              {{ `${route.date} ${route.pointA} - ${route.pointB} = ${route.distanceKm} км` }}
-            </span>
-
-            <span v-else class="text-danger">
-              {{ `${route.date} ${route.error.message}` }}
-            </span>
-          </em>
-        </p>
+        <route-item
+          v-if="routesReverse.length"
+          v-for="(route, index) in routesReverse"
+          :key="'route' + index"
+          :route="route"
+        />
       </div>
     </div>
   </div>
@@ -46,11 +43,13 @@
 <script>
 import 'bootstrap/dist/css/bootstrap.css'
 import DistanceCalculation from './components/DistanceCalculation.vue'
+import RouteItem from './components/RouteItem.vue'
 
 export default {
   name: 'app',
   components: {
-    DistanceCalculation
+    DistanceCalculation,
+    RouteItem
   },
   data: () => ({
     // Флаг что скрипт янедкс карт загрузился
