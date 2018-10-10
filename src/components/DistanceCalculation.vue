@@ -66,13 +66,13 @@ export default {
     }
   },
   methods: {
-    // Отчистить маршруты
+    // Очистить маршруты
     clear() {
       this.pointA = ''
       this.pointB = ''
     },
 
-    // Получить растояние между маршрутами
+    // Получить расстояние между маршрутами
     getDistance({ pointA, pointB }) {
       return window.ymaps.route([pointA, pointB])
         .then(route => route.getLength())
